@@ -11,3 +11,21 @@ VARIOUSE ERROR CODES AND THEIR CORRESPONDING TEXT_CODES
   203 = UNIQUE_ITEM
 
 
+
+
+This error means there are more than 64 indexes on your table. Each table can only have up to 64 indexes.
+
+You don't usually specify up to 65 indexes, so this error is caused when you run an multiple alter command in mysql and having a `UNIQUE` index on a column at all times. Because apperently, it seams alter commands is not resetting the index on a unique field but is creating a whole new index.
+
+ie: If column **_email_** is marked `UNIQUE` an idex `email` is created for it. If you alter the table and still have `UNIQUE` on column **_email_**, a new `email` index is created for the column but named as `email_2` instead of `email` which could have replaced the previouse one.
+
+The more alter commands you write with **_email_** having `UNIQUE` would cause more `email_(n)` indexes. That is why the maximum reaches.
+
+To prevent this error
+
+ - if your **_email_** column still have `UNIQUE` on it, remove it or first drop the previous index on the table before you run your alter command. usually ORM users, ORMs run same complete commands on every startup.
+ - If you have run a `UNIQUE` command, an index has already been created so don't run another one. For ORM users, remove the unique constraint from the column properties
+
+**_NOTE:_** I have only noticed this in MYSQL and I have noticed that it does not happen to other indexes like `primary`, `fulltext` etc. except `unique`.
+
+This is something I have noticed. I hope it helps

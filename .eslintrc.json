@@ -15,8 +15,12 @@
     "no-param-reassign": "off",
     "no-return-await": "off",
     "no-underscore-dangle": "off",
+    "no_camelcased": "off",
     "class-methods-use-this": "off",
-    "no-unused-vars": ["error", { "argsIgnorePattern": "res|req|next|val|_" }]
+    "no-unused-vars": ["error", { "argsIgnorePattern": "res|req|next|val|_" }],
+    "no-unused-expressions": "off",
+    "no-sequences": "off",
+    "no-use-before-define": "off"
   },
   "parserOptions": {
     "sourceType": "module"

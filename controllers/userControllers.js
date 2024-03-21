@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt');
 
 const User = require('../models/userModel');
 const AppError = require('../utils/appError');
-const { catchAsync, generateId } = require('../utils/utils');
+const { catchAsync, generateId, filterQuery } = require('../utils/utils');
 
 async function sendCookie(user, res) {
   const { jwt_secrete, jwt_expires, jwt_issuer, login_cookie, NODE_ENV, cookie_domain } = process.env;
@@ -29,13 +29,18 @@ async function sendCookie(user, res) {
 exports.addUser = catchAsync(async (req, res, next) => {
   const { name, email, password, passwordConfirm, access, accessLevel } = req.body;
 
+  // console.log(access, process.env.pass_code);
   if (password !== passwordConfirm) return next(new AppError('Passwords do not match', 406, { code: 103, textCode: 'WRONG_DATA' }));
   if (access !== process.env.pass_code) return next(new AppError('Access code is incorrect', 406, { code: 100, textCode: 'ACCESS_DENIED' }));
 
   const id = await generateId(User);
   const user = await User.create({ id, name, email, password, accessLevel });
 
-  await sendCookie(user, res);
+  res.status(200).json({
+    status: 'success',
+    message: `A new admin ${user.name} has been added`,
+    data: user,
+  });
 });
 
 //
@@ -49,7 +54,6 @@ exports.login = catchAsync(async (req, res, next) => {
   if (!user.active) return next(new AppError('Account is not active', 405, { code: 100, textCode: 'ACCESS_DENIED' }));
 
   const verify = await bcrypt.compare(password, user.password);
-  // if(!verify)
 
   if (!verify) return next(new AppError('Email of Password is incorrect', 405, { code: 103, textCode: 'WRONG_INPUT' }));
 
@@ -108,7 +112,7 @@ exports.password = catchAsync(async (req, res, next) => {
 
   res.status(200).json({
     status: 'success',
-    message: 'Users Access Level has been upgraded',
+    message: 'Your password has now been changed',
     data: user,
   });
 });
@@ -126,7 +130,7 @@ exports.deactivate = catchAsync(async (req, res, next) => {
 
   res.status(200).json({
     status: 'success',
-    message: 'User`s account has been deactivated',
+    message: `${user.name}'s account has been deactivated`,
     data: user,
   });
 });
@@ -144,7 +148,7 @@ exports.activate = catchAsync(async (req, res, next) => {
 
   res.status(200).json({
     status: 'success',
-    message: 'User`s account is back to active',
+    message: `${user.name}'s account is back to active`,
     data: user,
   });
 });
@@ -159,6 +163,7 @@ exports.deleteUser = catchAsync(async (req, res, next) => {
 
   res.status(200).json({
     status: 'success',
+    message: `${user.name}'s account has been deleted`,
     data: user,
   });
 });
@@ -166,11 +171,11 @@ exports.deleteUser = catchAsync(async (req, res, next) => {
 //
 
 exports.users = catchAsync(async (req, res, next) => {
-  const data = await User.findAll();
+  const data = await filterQuery(User, req.query, 'user');
 
   res.status(200).json({
     status: 'success',
-    data,
+    ...data,
   });
 });
 

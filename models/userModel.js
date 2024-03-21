@@ -9,8 +9,8 @@ const User = database.define(
   'User',
   {
     id: { type: DataTypes.STRING(10), allowNull: false, unique: true, primaryKey: true },
-    name: DataTypes.STRING,
-    email: { type: DataTypes.STRING, unique: true, allowNull: false },
+    name: { type: DataTypes.STRING(100), allowNull: false },
+    email: { type: DataTypes.STRING, allowNull: false },
     password: DataTypes.STRING,
     active: {
       type: DataTypes.BOOLEAN,
@@ -21,9 +21,17 @@ const User = database.define(
       defaultValue: 1,
       validate: { min: 1, max: 5 },
     },
-    included: { type: DataTypes.BOOLEAN, defaultValue: true },
   },
-  { defaultScope: { attributes: { exclude: ['password'] } } }
+  {
+    defaultScope: { attributes: { exclude: ['password'] } },
+    indexes: [
+      {
+        type: 'FULLTEXT',
+        name: 'textsearch',
+        fields: ['name', 'email'],
+      },
+    ],
+  }
 );
 
 User.addHook('beforeCreate', 'encryptPassword', async (instance) => {

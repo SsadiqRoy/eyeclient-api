@@ -20,7 +20,8 @@ const database = require('./db');
 async function connectToDB() {
   try {
     await database.authenticate();
-    await database.sync({ alter: true });
+    await database.sync();
+    // await database.sync({ alter: true });
 
     console.log('Database Connection Successfull 🙏🙏');
   } catch (error) {
@@ -29,7 +30,9 @@ async function connectToDB() {
 }
 
 connectToDB();
+// const anob = { name: 'James', age: 24, mother: 'Janie', skills: { drawing: 'good', writing: 'excellent' } };
 
+// console.log(Object.entries(anob));
 //
 
 const app = require('./app');

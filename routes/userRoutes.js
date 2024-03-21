@@ -5,10 +5,11 @@ const middleware = require('../middlewares/globalMdw');
 
 const router = express.Router();
 
-router.post('/new', controller.addUser);
 router.post('/login', controller.login);
+router.get('/login', middleware.isLoggedIn);
 
 router.use(middleware.protect);
+router.post('/new', controller.addUser);
 router.get('/', controller.users);
 router.patch('/', controller.update);
 router.patch('/upgrade', controller.upgrade);

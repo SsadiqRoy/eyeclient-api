@@ -29,6 +29,8 @@ exports.protect = catchAsync(async (req, res, next) => {
 
 exports.loggedIn = catchAsync(async (req, res, next) => {
   const cookie = req.cookies?.[process.env.login_cookie];
+
+  // console.log(cookie);
   if (!cookie) return next();
 
   let { id, iat, exp } = jwt.verify(cookie, process.env.jwt_secrete);
