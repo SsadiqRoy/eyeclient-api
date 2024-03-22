@@ -30,6 +30,8 @@ async function connectToDB() {
 }
 
 connectToDB();
+//
+
 // const anob = { name: 'James', age: 24, mother: 'Janie', skills: { drawing: 'good', writing: 'excellent' } };
 
 // console.log(Object.entries(anob));
