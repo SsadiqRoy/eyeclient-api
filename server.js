@@ -11,7 +11,7 @@ process.on('uncaughtException', (error) => {
 
 //
 
-dotenv.config({ path: path.join(__dirname, 'config.env') });
+dotenv.config({ path: path.join(__dirname, 'api-config.env') });
 
 //
 
