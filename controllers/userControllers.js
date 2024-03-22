@@ -15,7 +15,7 @@ async function sendCookie(user, res) {
     httpOnly: true,
     secure: NODE_ENV === 'production',
     expires: new Date(Date.now() + +jwt_expires),
-    domain: cookie_domain,
+    // domain: cookie_domain,
   });
 
   res.status(200).json({
