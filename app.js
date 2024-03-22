@@ -4,7 +4,13 @@ const express = require('express');
 const cors = require('cors');
 
 const app = express();
-const corsOrigin = ['http://localhost:3100'];
+const corsOrigin = [
+  'http://localhost:3100',
+  'https://www.eyeclient.com',
+  'https://eyeclient.com',
+  'https://www.api.eyeclient.com',
+  'https://api.eyeclient.com',
+];
 
 app.use(cookieParser());
 app.use(express.json());
