@@ -108,6 +108,11 @@ exports.softUpdate = catchAsync(async (req, res, next) => {
 //
 
 exports.hardAdd = catchAsync(async (req, res, next) => {
+  if (req.body.imdbId) {
+    const oldMedia = await Media.findOne({ where: { imdbId: req.body.imdbId, type: req.body.type } });
+    if (oldMedia) return next(new AppError(`Media (${oldMedia.title}) already exist: ${oldMedia.type} (${oldMedia.imdbId})`, 401));
+  }
+
   const data = {
     imdbId: req.body.imdbId,
     type: req.body.type,
