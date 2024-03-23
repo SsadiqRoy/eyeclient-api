@@ -74,7 +74,7 @@ exports.softUpdate = catchAsync(async (req, res, next) => {
     released: response.Released === 'N/A' ? undefined : response.Released,
     genre: response.Genre === 'N/A' ? null : response.Genre,
     directors: mergeString(media.directors, response.Director),
-    writers: mergeString(media.writers, response.response.Writer.slice(0, 500)),
+    writers: mergeString(media.writers, response.Writer.slice(0, 500)),
     actors: mergeString(media.actors, response.Actors),
     plot: response.Plot === 'N/A' ? null : response.Plot,
     poster: response.Poster === 'N/A' ? null : response.Poster,
