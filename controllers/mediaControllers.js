@@ -74,7 +74,7 @@ exports.softUpdate = catchAsync(async (req, res, next) => {
     year: response.Year === 'N/A' ? null : response.Year,
     rated: response.Rated === 'N/A' ? null : response.Rated,
     released: response.Released === 'N/A' ? undefined : response.Released,
-    genre: response.Genre === 'N/A' ? null : response.Genre,
+    genre: mergeString(media.genre, response.Genre),
     directors: mergeString(media.directors, response.Director),
     writers: mergeString(media.writers, response.Writer.slice(0, 500)),
     actors: mergeString(media.actors, response.Actors),
