@@ -14,10 +14,12 @@ const { catchAsync, generateId, filterQuery, updater, mergeString } = require('.
 exports.softAdd = catchAsync(async (req, res, next) => {
   const [imdbId, type] = req.body.imdbId.split(',');
   const { omdb_url_id } = process.env;
-
   const response = await getRequest(`${omdb_url_id}${imdbId}`, req);
 
   if (response.Response === 'False') return next(new AppError(`${response.Error} with imdb id ${imdbId}`, 404));
+
+  const oldMedia = await Media.findOne({ where: { imdbId, type: type || response.Type } });
+  if (oldMedia) return next(new AppError(`Media (${oldMedia.title}) already exist: ${oldMedia.type} (${imdbId})`, 401));
 
   const data = {
     imdbId,
