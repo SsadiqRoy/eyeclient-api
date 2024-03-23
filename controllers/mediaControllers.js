@@ -8,7 +8,7 @@ const Season = require('../models/seasonModel');
 const AppError = require('../utils/appError');
 const { getRequest } = require('../utils/model');
 
-const { catchAsync, generateId, filterQuery, updater } = require('../utils/utils');
+const { catchAsync, generateId, filterQuery, updater, mergeString } = require('../utils/utils');
 // const QueryFeature = require('../utils/queryFeature');
 
 exports.softAdd = catchAsync(async (req, res, next) => {
@@ -29,7 +29,7 @@ exports.softAdd = catchAsync(async (req, res, next) => {
     genre: response.Genre === 'N/A' ? null : response.Genre,
     directors: response.Director === 'N/A' ? null : response.Director,
     writers: response.Writer.length < 500 ? response.Writer : response.Writer.slice(0, 500),
-    actors: response.Actor === 'N/A' ? null : response.Actor,
+    actors: response.Actor === 'N/A' ? null : response.Actors,
     plot: response.Plot === 'N/A' ? null : response.Plot,
     poster: response.Poster === 'N/A' ? null : response.Poster,
     language: response.Language === 'N/A' ? null : response.Language,
@@ -73,9 +73,9 @@ exports.softUpdate = catchAsync(async (req, res, next) => {
     rated: response.Rated === 'N/A' ? null : response.Rated,
     released: response.Released === 'N/A' ? undefined : response.Released,
     genre: response.Genre === 'N/A' ? null : response.Genre,
-    directors: response.Director === 'N/A' ? null : response.Director,
-    writers: response.Writer.length < 500 ? response.Writer : response.Writer.slice(0, 500),
-    actors: response.Actor === 'N/A' ? null : response.Actor,
+    directors: mergeString(media.directors, response.Director),
+    writers: mergeString(media.writers, response.response.Writer.slice(0, 500)),
+    actors: mergeString(media.actors, response.Actors),
     plot: response.Plot === 'N/A' ? null : response.Plot,
     poster: response.Poster === 'N/A' ? null : response.Poster,
     language: response.Language === 'N/A' ? null : response.Language,

@@ -50,3 +50,13 @@ exports.filterQuery = async (Model, reqQuery, model = 'media') => {
   const meta = { ...prevQuery, page, limit, total, length, available, consumed };
   return { meta, data };
 };
+
+exports.mergeString = (st1, st2) => {
+  if (st1 === 'N/A') st1 = null;
+  if (st2 === 'N/A') st2 = null;
+
+  let all = `${st1 || ''}, ${st2 || ''}`;
+  all = [...new Set(all.split(','))].join(', ');
+
+  return all;
+};
