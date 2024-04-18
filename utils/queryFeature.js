@@ -52,6 +52,8 @@ class QueryFeature {
     // For full text search
     if (where.search) {
       if (typeof where.search === 'string') {
+        where.search = where.search.trim();
+
         where[Op.or] = this.indexes[this.model].map((field) => {
           const ob = {};
           ob[field] = {};

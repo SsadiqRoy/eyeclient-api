@@ -448,11 +448,15 @@ exports.hardAddEpisode = catchAsync(async (req, res, next) => {
     released: req.body.released,
   };
 
+  // console.log('data', data);
+
   data.id = await generateId(Episode);
   data.createdBy = req.user.id;
 
   const episode = await Episode.create(data);
   updateLastEpisode(episode.series, episode);
+
+  // console.log('data', episode);
 
   res.status(200).json({
     status: 'success',
